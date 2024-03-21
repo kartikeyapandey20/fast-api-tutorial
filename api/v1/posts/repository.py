@@ -28,7 +28,7 @@ class PostRepository:
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Post not found" 
             )
-        return {'data': post}
+        return post
         
     def delete_post_by_id(self, id , db : Session = Depends(get_db)):
         

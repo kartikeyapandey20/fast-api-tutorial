@@ -5,11 +5,14 @@ from pydantic import BaseModel
 from random import randrange
 from api.v1 import api_router
 from db.database import Base , engine
-from api.v1.posts import models
+from api.v1.posts import models as PostModels
+from api.v1.user import models as UserModels
+
 app = FastAPI()
 app.include_router(api_router)
 
-models.Base.metadata.create_all(bind=engine)
+UserModels.Base.metadata.create_all(bind=engine)
+PostModels.Base.metadata.create_all(bind=engine)
 
 
 # my_posts = [{"id" : 1,"title": "this is title","content": "this content"},{"id" : 2,"title": "this is title 2","content": "this content 2"} ]
