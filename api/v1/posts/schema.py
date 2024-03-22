@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
+from api.v1.user.schemas import UserOut
 class PostSchema(BaseModel):
     title : str
     content : str 
@@ -8,5 +9,7 @@ class PostSchema(BaseModel):
 class Post(PostSchema):
     id : int
     created_at : datetime
+    owner_id : int
+    owner : UserOut
     class Config:
         orm_mode = True
