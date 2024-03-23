@@ -13,3 +13,11 @@ class Post(PostSchema):
     owner : UserOut
     class Config:
         orm_mode = True
+        
+class PostVote(PostSchema):
+    id : int
+    created_at : datetime
+    owner_id : int
+    votes : int
+    class Config:
+        orm_mode = True

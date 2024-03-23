@@ -2,8 +2,11 @@ from fastapi import APIRouter , Depends , status
 from .domain import PostDomain
 from sqlalchemy.orm import Session
 from core.deps import get_db
-from .schema import PostSchema , Post
+from .schema import PostSchema , Post , PostVote
+from .models import Post as PostModel
 from api.v1.auth.oauth2 import get_current_user
+from sqlalchemy import func
+from api.v1.vote.models import Voter
 class PostRouter:
     def __init__(self) -> None:
         self.__domain = PostDomain()
@@ -12,9 +15,10 @@ class PostRouter:
     def router(self):
         api_router = APIRouter(prefix="/posts",tags=["post"])
         
-        @api_router.get("/",status_code=status.HTTP_200_OK,response_model=list[Post])
-        def get_posts(db : Session = Depends(get_db),get_current_user : int = Depends(get_current_user), limit : int = 10,skip : int = 0):
-            return self.__domain.get_post(db,get_current_user,limit,skip)
+        @api_router.get("/",status_code=status.HTTP_200_OK,response_model=list[PostVote])
+        def get_posts(db: Session = Depends(get_db), current_user: int = Depends(get_current_user), limit: int = 10, skip: int = 0):
+            return self.__domain.get_post(db,current_user,limit,skip)
+
         
         @api_router.post("/",status_code=status.HTTP_201_CREATED,response_model=Post)
         def create_post(post : PostSchema ,db : Session = Depends(get_db),get_current_user : int = Depends(get_current_user)):

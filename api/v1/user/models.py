@@ -1,7 +1,7 @@
 from sqlalchemy import Column ,Integer , String , Boolean
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.expression import text
-from db.database import Base , engine
+from db.database import Base 
 import pydantic
 
 

@@ -7,13 +7,14 @@ from api.v1 import api_router
 from db.database import Base , engine
 from api.v1.posts import models as PostModels
 from api.v1.user import models as UserModels
+from api.v1.vote import models as VoteModels
 
 app = FastAPI()
 app.include_router(api_router)
 
 UserModels.Base.metadata.create_all(bind=engine)
 PostModels.Base.metadata.create_all(bind=engine)
-
+VoteModels.Base.metadata.create_all(bind=engine)
 
 # my_posts = [{"id" : 1,"title": "this is title","content": "this content"},{"id" : 2,"title": "this is title 2","content": "this content 2"} ]
 # class Post(BaseModel):
