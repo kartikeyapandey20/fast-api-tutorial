@@ -15,5 +15,5 @@ class PostDomain:
         return self.__repository.get_post_by_id(id,db,get_current_user)
     def delete_post_by_id(self,id,db,get_current_user):
         return self.__repository.delete_post_by_id(id,db,get_current_user)
-    def update_post_by_id(self,id,post,db):
-        return self.__repository.update_post_by_id(id,post,db)
+    def update_post_by_id(self,id,post,db,get_current_user):
+        return self.__repository.update_post_by_id(id,post,db,get_current_user)

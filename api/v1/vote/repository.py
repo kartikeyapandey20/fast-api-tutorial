@@ -32,7 +32,7 @@ class VoteRepository:
         else:
             if not found_vote:
                 raise HTTPException(
-                    status_code=status.HTTP_409_CONFLICT,
+                    status_code=status.HTTP_404_NOT_FOUND,
                     detail="Vote Does not exist"
                 )
             vote_query.delete(synchronize_session=False)

@@ -38,19 +38,26 @@ class PostRepository:
     
     def get_post_by_id(self, id , db : Session = Depends(get_db),get_current_user : User = Depends(get_current_user)):
         
-        post = db.query(Post).filter(Post.id == id).first()
+        posts = db.query(Post, func.count(Voter.post_id).label("votes")).join(
+        Voter, Voter.post_id == Post.id, isouter=True).group_by(Post.id).filter(Post.id == id).first()
         
-        if not post:
+        
+        if not posts:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Post not found" 
             )
-        if post.owner_id!= get_current_user.id:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Not authorized" 
-            )
-        return post
+        post, votes = posts
+        serialzied_post = {
+            "id": post.id,
+            "title": post.title,
+            "content": post.content,
+            "published": post.published,
+            "created_at": post.created_at,
+            "owner_id": post.owner_id,
+            "votes": votes
+            }
+        return serialzied_post
         
     def delete_post_by_id(self, id , db : Session = Depends(get_db),get_current_user : User = Depends(get_current_user)):
         
@@ -72,7 +79,7 @@ class PostRepository:
         
         return {"message": "post deleted successfully"}
     
-    def update_post_by_id(self,id : int , updated_post : PostSchema,db : Session = Depends(get_db)):
+    def update_post_by_id(self,id : int , updated_post : PostSchema,db : Session = Depends(get_db),get_current_user : User = Depends(get_current_user)):
         
         post_query = db.query(Post).filter(Post.id == id)
 
@@ -83,7 +90,7 @@ class PostRepository:
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Post not found" 
             )
-        if post.owner_id!= get_current_user:
+        if post.owner_id!= get_current_user.id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Not authorized" 

@@ -24,16 +24,16 @@ class PostRouter:
         def create_post(post : PostSchema ,db : Session = Depends(get_db),get_current_user : int = Depends(get_current_user)):
             return self.__domain.create_post(db, post,get_current_user)
         
-        @api_router.get("/{id}",response_model=Post)
+        @api_router.get("/{id}",response_model=PostVote)
         def get_post_by_id(id : int ,db : Session = Depends(get_db),get_current_user : int = Depends(get_current_user)):
             return self.__domain.get_post_by_id(id,db,get_current_user)
         
-        @api_router.delete("/{id}")
-        def update_post_by_id(id : int,db : Session = Depends(get_db),get_current_user : int = Depends(get_current_user)): 
+        @api_router.delete("/{id}",status_code=status.HTTP_204_NO_CONTENT)
+        def delete_post_by_id(id : int,db : Session = Depends(get_db),get_current_user : int = Depends(get_current_user)): 
             return self.__domain.delete_post_by_id(id,db,get_current_user)        
 
         @api_router.put("/{id}",response_model=Post)
-        def update_post_by_id(id : int,post : PostSchema ,db : Session = Depends(get_db)): 
-            return self.__domain.update_post_by_id(id,post,db)
+        def update_post_by_id(id : int,post : PostSchema ,db : Session = Depends(get_db),get_current_user : int = Depends(get_current_user)): 
+            return self.__domain.update_post_by_id(id,post,db,get_current_user)
         
         return api_router
