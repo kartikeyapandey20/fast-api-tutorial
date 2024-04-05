@@ -5,6 +5,9 @@ from pydantic_settings import BaseSettings
 load_dotenv()
 
 class Settings(BaseSettings):
+    """
+    Consists of system wide configuration settings
+    """
     DB_HOST : str = os.environ.get("DB_HOST")
     DB_USER : str = os.environ.get("DB_USER")
     DB_NAME : str = os.environ.get("DB_NAME")
